@@ -1,0 +1,17 @@
+{
+  "name": "hitn-fit",
+  "version": "1.0.0",
+  "description": "Hit-Fit",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "Subho'n Nihar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.7",
+    "nodemon": "^1.19.4"
+  }
+}
