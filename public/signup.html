@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css" />
     <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Tajawal&display=swap" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="main-menu">
@@ -33,7 +34,7 @@
           <p>Please fill in this form to create an account.</p>
           <hr />
 
-          <label for="email"><b>Name</b></label>
+          <label for="name"><b>Name</b></label>
           <input type="text" placeholder="Enter Name" name="name" required />
 
           <label for="email"><b>Email</b></label>
@@ -45,8 +46,6 @@
           <label for="psw-repeat"><b>Repeat Password</b></label>
           <input type="password" placeholder="Repeat Password" name="psw-repeat" required />
           <hr />
-
-          <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
           <button type="submit" class="registerbtn">Register</button>
         </div>
 
@@ -55,5 +54,31 @@
         </div>
       </form>
     </section>
+    <script>
+      $(document).ready(function() {
+        $("form").on("submit", function(event) {
+          let flag = true;
+          let email = $("input[name=email]").val();
+          let password = $("input[name=psw]").val();
+          let password_repeat = $("input[name=psw-repeat]").val();
+          const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const password_regex = /^[\w\s]{8,}$/;
+          if (!email_regex.test(email)) {
+            alert("Your email does not confirm to email standards");
+            flag = false;
+          } else if (!password_regex.test(password)) {
+            alert("Your password should be more than 8 characters");
+            flag = false;
+          } else if (password_repeat !== password) {
+            alert("Re-entered password mismatch");
+            flag = false;
+          }
+          if (!flag) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
