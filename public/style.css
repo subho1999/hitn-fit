@@ -174,7 +174,6 @@ h1.main-heading {
   box-sizing: border-box;
 }
 
-/* Add padding to containers */
 .container {
   color: #f1f1f1;
   background: rgba(0, 0, 0, 0.616);
@@ -182,7 +181,6 @@ h1.main-heading {
   padding: 16px;
 }
 
-/* Full-width input fields */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -201,13 +199,11 @@ input[type="password"]:focus {
   outline: none;
 }
 
-/* Overwrite default styles of hr */
 hr {
   border: 1px solid #f1f1f1;
   margin-bottom: 25px;
 }
 
-/* Set a style for the submit/register button */
 .registerbtn {
   background-color: #7a0000;
   color: white;
@@ -235,4 +231,22 @@ a {
 
 .container-sm {
   width: 40%;
+}
+
+.err {
+  background: rgba(0, 0, 0, 0.55);
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: none;
+  border: none;
+}
+
+.err-angular {
+  background: rgba(0, 0, 0, 0.55);
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
 }

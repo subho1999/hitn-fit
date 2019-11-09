@@ -9,8 +9,9 @@
     <link href="https://fonts.googleapis.com/css?family=Tajawal&display=swap" rel="stylesheet" />
     <title>Login</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
   </head>
-  <body>
+  <body ng-app="">
     <div class="main-menu">
       <div class="logo">
         <img src="img/logo.png" />
@@ -35,10 +36,21 @@
           <hr />
 
           <label for="email"><b>Email</b></label>
-          <input type="email" placeholder="Enter Email" name="email" required />
-
+          <input type="text" placeholder="Enter Email" name="email" required ng-model="mail" />
+          <div class="err" id="email-err">
+            Your email: <span ng-bind="mail"></span> doesn't conform to regular email standards
+          </div>
+          <div class="err" id="email-missing">
+            Email is required.
+          </div>
           <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="psw" required />
+          <div class="err" id="pass-err">
+            Password should be greater than 8 characters.
+          </div>
+          <div class="err" id="pass-missing">
+            Password is required.
+          </div>
           <button type="submit" class="registerbtn">Login</button>
         </div>
 
@@ -51,20 +63,48 @@
       $(document).ready(function() {
         $("form").on("submit", function(event) {
           let flag = true;
-          let email = $("input[type=email]").val();
+          let email = $("input[name=email]").val();
           let password = $("input[type=password]").val();
           const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           const password_regex = /^[\w\s]{8,}$/;
           if (!email_regex.test(email)) {
-            alert("Your email does not confirm to email standards");
             flag = false;
           } else if (!password_regex.test(password)) {
-            alert("Your password should be more than 8 characters");
             flag = false;
           }
           if (!flag) {
             event.preventDefault();
             event.stopPropagation();
+          }
+        });
+
+        $("input[name=email]").on("input", function() {
+          let email = $("input[name=email]").val();
+          const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (email === "") {
+            $("#email-err").css("display", "none");
+            $("#email-missing").css("display", "inline-block");
+          } else if (!email_regex.test(email)) {
+            $("#email-missing").css("display", "none");
+            $("#email-err").css("display", "inline-block");
+          } else {
+            $("#email-missing").css("display", "none");
+            $("#email-err").css("display", "none");
+          }
+        });
+
+        $("input[name=psw]").on("input", function() {
+          let pass = $("input[name=psw]").val();
+          const password_regex = /^[\w\s]{8,}$/;
+          if (pass === "") {
+            $("#pass-missing").css("display", "inline-block");
+            $("#pass-err").css("display", "none");
+          } else if (!password_regex.test(pass)) {
+            $("#pass-missing").css("display", "none");
+            $("#pass-err").css("display", "inline-block");
+          } else {
+            $("#pass-missing").css("display", "none");
+            $("#pass-err").css("display", "none");
           }
         });
       });
