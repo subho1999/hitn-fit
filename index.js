@@ -1,7 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 const app = express();
+
+const saltRounds = 5;
 
 mongoose.connect("mongodb://localhost/userFitDB", {
   useNewUrlParser: true,
@@ -23,17 +26,21 @@ app.use(express.urlencoded({ extended: false }));
 const User = new mongoose.model("users", userSchema);
 
 app.post("/signup", (req, res) => {
-  signupDetails = {
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.psw
-  };
-  User.create(signupDetails, (err, response) => {
-    if (err) {
-      res.redirect("/notFound");
-    } else {
-      res.redirect("/success");
-    }
+  let plainTextPass = req.body.psw;
+  bcrypt.hash(plainTextPass, saltRounds, (err, hashedPass) => {
+    if (err) throw err;
+    signupDetails = {
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPass
+    };
+    User.create(signupDetails, (err, response) => {
+      if (err) {
+        res.status(500).send();
+      } else {
+        res.redirect("/success");
+      }
+    });
   });
 });
 
@@ -50,13 +57,21 @@ app.post("/login", (req, res) => {
     email: req.body.email,
     password: req.body.psw
   };
-  User.find({ email: loginDetails.email, password: loginDetails.password }, (err, response) => {
+
+  User.find({ email: loginDetails.email }, (err, response) => {
     if (err) throw err;
     else {
-      if (Object.entries(response).length == 0) {
+      if (Object.entries(response).length === 0) {
         res.redirect("/notFound");
       } else {
-        res.redirect("/successLogin");
+        bcrypt.compare(loginDetails.password, response[0].password, (error, resp) => {
+          if (error) throw error;
+          if (resp === true) {
+            res.redirect("/successLogin");
+          } else {
+            res.redirect("/wrongPass");
+          }
+        });
       }
     }
   });
@@ -64,6 +79,10 @@ app.post("/login", (req, res) => {
 
 app.get("/successLogin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "success.html"));
+});
+
+app.get("/wrongPass", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "wrongpass.html"));
 });
 
 app.use(express.static(path.join(__dirname, "public")));
