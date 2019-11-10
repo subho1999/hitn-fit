@@ -4,6 +4,7 @@
   "description": "Hit-Fit",
   "main": "index.js",
   "scripts": {
+    "build": "npm install",
     "start": "node index",
     "dev": "nodemon index"
   },
